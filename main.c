@@ -15,6 +15,8 @@ char wardName[WARD_COUNT][30]={"General Ward","Paediatric Ward","Surgical Ward",
 float dailyBedRate[WARD_COUNT]={3000.00,6000.00,12000.00,25000.00};
 int totalBedCapacity[WARD_COUNT]={20,10,10,05};
 
+int bedOccupancy[4][20] ={0};
+
 int main()
 {
     printf("==============================================================\n");
@@ -34,6 +36,24 @@ int main()
     {
         printf("%d. %s - LKR %.2f/day - capacity: %d beds\n",wardID[i],wardName[i],dailyBedRate[i],totalBedCapacity[i]);
 
+    }
+    printf("\nBed Availability\n");
+    printf("-------------------\n");
+    for (int ward =0 ; ward < WARD_COUNT; ward++)
+    {
+        printf("\n%s:\n",wardName[ward]);
+           for(int bed=0; bed < totalBedCapacity[ward]; bed++)
+           {
+               if (bedOccupancy[ward][bed] == 0)
+
+               {
+                   printf("Bed %02d - Available\n", bed + 1);
+               }
+               else
+               {
+                   printf("Bed %02d- Occupied\n", bed + 1);
+               }
+           }
     }
     return 0;
 }
