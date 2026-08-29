@@ -2,6 +2,7 @@
 
 #define SPECIALTY_COUNT 4
 #define WARD_COUNT 4
+#define MAX_PATIENTS 100
 
 /*Doctor specialties data*/
 int specialtyID[SPECIALTY_COUNT] ={1,2,3,4};
@@ -14,8 +15,18 @@ int wardID[WARD_COUNT]={1,2,3,4};
 char wardName[WARD_COUNT][30]={"General Ward","Paediatric Ward","Surgical Ward","ICU(Intensive Care Unit)"};
 float dailyBedRate[WARD_COUNT]={3000.00,6000.00,12000.00,25000.00};
 int totalBedCapacity[WARD_COUNT]={20,10,10,05};
-
 int bedOccupancy[4][20] ={0};
+
+char patientName[MAX_PATIENTS][50];
+int patientAge[MAX_PATIENTS];
+int emergencyLevel[MAX_PATIENTS];
+int patientSpecialty[MAX_PATIENTS];
+int admittedToWard[MAX_PATIENTS];
+int patientWard[MAX_PATIENTS];
+int daysAdmitted[MAX_PATIENTS];
+
+int patientCount=0;
+
 
 int main()
 {
@@ -55,5 +66,31 @@ int main()
                }
            }
     }
+    printf("\nPatient Registration\n");
+    printf("---------------------------\n");
+    printf("Enter Patient name:");
+    scanf("  %[^\n]", patientName[patientCount]);
+    printf("Enter Patient age:");
+    scanf("%d", &patientAge[patientCount]);
+    printf("Enter emergency Level(1-Normal,2=urgent,3=critical:");
+    scanf(" %d", &emergencyLevel[patientCount]);
+    printf("Is Admitted Ward?(1=Yes,2=No):");
+    scanf(" %d", &admittedToWard[patientCount]);
+      if (admittedToWard[patientCount]==1){
+        printf("Enter Ward ID(1-4);");
+        scanf("%d",&patientWard[patientCount]);
+
+        printf("Enter days of Admitted;");
+        scanf("%d",&daysAdmitted[patientCount]);
+    }
+      else
+      {
+         patientWard[patientCount]=0;
+         daysAdmitted[patientCount]=0;
+      }
+    patientCount++;
+    printf("\nPatient Registerd Succesfully.\n");
+
+
     return 0;
 }
