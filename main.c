@@ -50,6 +50,17 @@ float calculateSurcharge(float consulationFee, int emergencyLevel)
      return 0;
     }
 }
+float calculateWardCost(int wardID,int days)
+    {
+        if (wardID >= 1 && wardID <= WARD_COUNT)
+        {
+            return dailyBedRate[wardID -1] * days;
+        }else
+        {
+            return 0;
+        }
+    }
+
 int main()
 {
     printf("==============================================================\n");
@@ -124,7 +135,10 @@ int main()
 
     printf("Emergency Surcharge:LKR%.2f\n",surcharge);
 
+    float wardCost;
+    wardCost= calculateWardCost(patientWard[patientCount],daysAdmitted[patientCount]);
 
+    printf("Ward cost: LKR %.2f\n",wardCost);
 
     specialtyQueueCount[patientSpecialty[patientCount]-1]++;
 
