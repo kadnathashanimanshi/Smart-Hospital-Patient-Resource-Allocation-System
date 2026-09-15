@@ -33,6 +33,23 @@ float calculateWaitingTime(int queueCount, int consulationTime)
     return queueCount * consulationTime;
 }
 
+float calculateSurcharge(float consulationFee, int emergencyLevel)
+{
+    if (emergencyLevel==1)
+    {
+        return 0;
+    }else if(emergencyLevel==2)
+    {
+        return consulationFee * 0.20;
+    }
+    else if (emergencyLevel==3)
+    {
+        return consulationFee * 0.50;
+    }else
+    {
+     return 0;
+    }
+}
 int main()
 {
     printf("==============================================================\n");
@@ -101,6 +118,13 @@ int main()
 
     waitingTime=calculateWaitingTime(specialtyQueueCount[patientSpecialty[patientCount]-1], consultationTime[patientSpecialty[patientCount]-1]);
     printf("Estimated waiting Time:%.2f minutes\n",waitingTime);
+
+    float surcharge;
+    surcharge= calculateSurcharge(consultationFee[patientSpecialty[patientCount]-1],emergencyLevel[patientCount]);
+
+    printf("Emergency Surcharge:LKR%.2f\n",surcharge);
+
+
 
     specialtyQueueCount[patientSpecialty[patientCount]-1]++;
 
