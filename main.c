@@ -60,6 +60,16 @@ float calculateWardCost(int wardID,int days)
             return 0;
         }
     }
+float calculateAgeSubsidy(int age,float grossAmount)
+{
+    if (age <5 || age >65)
+    {
+        return grossAmount * 0.15;
+    }else
+    {
+        return 0;
+    }
+}
 
 int main()
 {
@@ -142,6 +152,10 @@ int main()
 
     float grossAmount = consultationFee[patientSpecialty[patientCount]-1]+surcharge+wardCost;
     printf("Gross Amount: LKR %.2f\n",grossAmount);
+
+    float discount;
+    discount=calculateAgeSubsidy(patientAge[patientCount],grossAmount);
+    printf("Age subsidy: LKR %.2f\n",discount);
 
     specialtyQueueCount[patientSpecialty[patientCount]-1]++;
 
