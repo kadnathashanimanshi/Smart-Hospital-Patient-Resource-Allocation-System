@@ -105,7 +105,7 @@ int main()
     scanf("  %[^\n]", patientName[patientCount]);
     printf("Enter Patient age:");
     scanf("%d", &patientAge[patientCount]);
-    printf("Enter emergency Level(1-Normal,2=urgent,3=critical0:");
+    printf("Enter emergency Level(1-Normal,2=urgent,3=critical):");
     scanf(" %d", &emergencyLevel[patientCount]);
     printf("Enter Specialty ID(1-4):");
     scanf("%d",&patientSpecialty[patientCount]);
@@ -139,6 +139,9 @@ int main()
     wardCost= calculateWardCost(patientWard[patientCount],daysAdmitted[patientCount]);
 
     printf("Ward cost: LKR %.2f\n",wardCost);
+
+    float grossAmount = consultationFee[patientSpecialty[patientCount]-1]+surcharge+wardCost;
+    printf("Gross Amount: LKR %.2f\n",grossAmount);
 
     specialtyQueueCount[patientSpecialty[patientCount]-1]++;
 
