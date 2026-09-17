@@ -26,6 +26,7 @@ int admittedToWard[MAX_PATIENTS];
 int patientWard[MAX_PATIENTS];
 int daysAdmitted[MAX_PATIENTS];
 
+float patientFinalAmount[MAX_PATIENTS];
 int specialtyQueueCount[SPECIALTY_COUNT]= {0};
 
 int patientCount=0;
@@ -219,6 +220,8 @@ int main()
     finalAmount=grossAmount-discount;
     printf("Final Amount:%.2f\n",finalAmount);
 
+    patientFinalAmount[patientCount]=finalAmount;
+
     specialtyQueueCount[patientSpecialty[patientCount]-1]++;
 
     patientCount++;
@@ -244,5 +247,16 @@ int main()
      int availableBeds=totalBedCapacity[ward]-occupiedBeds;
      printf("%s: Total= %d,occupied= %d, Available= %d, Occupancy=%.2f%%\n",wardName[ward],totalBedCapacity[ward],occupiedBeds,availableBeds,calculateOcuupancyPercentage(ward));
 
-     }return 0;
+     }
+     printf("\nRevenue Report\n");
+     printf("-------------------------\n");
+     float totalRevenue=0;
+     for (int i=0;i<patientCount;i++)
+     {
+         totalRevenue=totalRevenue+patientFinalAmount[i];
+     }
+     printf("Total Patients: %d\n",patientCount);
+     printf("Total Revenue:LKR %.2f\n",totalRevenue);
+
+    return 0;
 }
