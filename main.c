@@ -118,6 +118,17 @@ void sortPatientsByPriority()
  }
     }
      }
+float calculateOcuupancyPercentage(int ward)
+{
+    int occupiedBeds=0;
+    for (int bed=0; bed<totalBedCapacity[ward];bed++){
+        if (bedOccupancy[ward][bed]==1)
+            {
+            occupiedBeds++;
+            }
+
+            }return (occupiedBeds* 100.0)/totalBedCapacity[ward];
+}
 int main()
 {
     printf("==============================================================\n");
@@ -220,7 +231,18 @@ int main()
     {
         printf("%d. %s -Emergency Level: %d\n",i+1,patientName[i],emergencyLevel[i]);
     }
+     printf("\nWard Occupancy Report\n");
+     printf("-------------------------\n");
+     for( int ward =0;ward < WARD_COUNT;ward++){
+        int occupiedBeds=0;
+      for (int bed=0; bed < totalBedCapacity[ward]; bed++){
+        if (bedOccupancy[ward][bed]==1)
+            {
+            occupiedBeds++;
+            }
+     }
+     int availableBeds=totalBedCapacity[ward]-occupiedBeds;
+     printf("%s: Total= %d,occupied= %d, Available= %d, Occupancy=%.2f%%\n",wardName[ward],totalBedCapacity[ward],occupiedBeds,availableBeds,calculateOcuupancyPercentage(ward));
 
-
-    return 0;
+     }return 0;
 }
