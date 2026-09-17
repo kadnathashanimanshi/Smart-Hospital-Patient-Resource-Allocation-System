@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include<string.h>
 
 #define SPECIALTY_COUNT 4
 #define WARD_COUNT 4
@@ -70,7 +71,53 @@ float calculateAgeSubsidy(int age,float grossAmount)
         return 0;
     }
 }
+void sortPatientsByPriority()
+{  for(int i=0;i<patientCount-1;i++)
+    { for (int j=i+1;j<patientCount;j++)
+    {
+        if(emergencyLevel[i]< emergencyLevel[j])
+     {  int temp;
+        temp= emergencyLevel[i];
+        emergencyLevel[i]=emergencyLevel[j];
+        emergencyLevel[j]=temp;
 
+        int tempAge;
+        tempAge=patientAge[i];
+        patientAge[i]=patientAge[j];
+        patientAge[j]=tempAge;
+
+        char tempName[50];
+
+        strcpy(tempName,patientName[i]);
+        strcpy(patientName[i],patientName[j]);
+        strcpy(patientName[j],tempName);
+
+        int tempSpecialty;
+
+        tempSpecialty=patientSpecialty[i];
+        patientSpecialty[i]=patientSpecialty[j];
+        patientSpecialty[j]=tempSpecialty;
+
+        int tempWard;
+        tempWard=patientWard[i];
+        patientWard[i]=patientWard[j];
+        patientWard[j]=tempWard;
+
+        int tempAdmitted;
+
+        tempAdmitted=admittedToWard[i];
+        admittedToWard[i]=admittedToWard[j];
+        admittedToWard[j]=tempAdmitted;
+
+        int tempDays;
+        tempDays=daysAdmitted[i];
+        daysAdmitted[i]=daysAdmitted[j];
+        daysAdmitted[j]=tempDays;
+
+}
+ }
+    }
+     }
 int main()
 {
     printf("==============================================================\n");
@@ -157,10 +204,22 @@ int main()
     discount=calculateAgeSubsidy(patientAge[patientCount],grossAmount);
     printf("Age subsidy: LKR %.2f\n",discount);
 
+    float  finalAmount;
+    finalAmount=grossAmount-discount;
+    printf("Final Amount:%.2f\n",finalAmount);
+
     specialtyQueueCount[patientSpecialty[patientCount]-1]++;
 
     patientCount++;
+
+    sortPatientsByPriority();
     printf("\nPatient Registerd Succesfully.\n");
+    printf("\nPatient Priority Order\n");
+    printf("-------------------------\n");
+    for(int i=0; i<patientCount;i++)
+    {
+        printf("%d. %s -Emergency Level: %d\n",i+1,patientName[i],emergencyLevel[i]);
+    }
 
 
     return 0;
