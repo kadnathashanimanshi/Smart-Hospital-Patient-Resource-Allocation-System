@@ -27,6 +27,7 @@ int patientWard[MAX_PATIENTS];
 int daysAdmitted[MAX_PATIENTS];
 
 float patientFinalAmount[MAX_PATIENTS];
+float patientDiscount[MAX_PATIENTS];
 int specialtyQueueCount[SPECIALTY_COUNT]= {0};
 
 int patientCount=0;
@@ -115,6 +116,15 @@ void sortPatientsByPriority()
         daysAdmitted[i]=daysAdmitted[j];
         daysAdmitted[j]=tempDays;
 
+         float tempAmount;
+         tempAmount=patientFinalAmount[i];
+         patientFinalAmount[i]=patientFinalAmount[j];
+         patientFinalAmount[j]=tempAmount;
+
+         float tempDiscount;
+         tempDiscount=patientDiscount[i];
+         patientDiscount[i]=patientDiscount[j];
+         patientDiscount[j]=tempDiscount;
 }
  }
     }
@@ -168,25 +178,82 @@ int main()
                }
            }
     }
+    int anotherPatient=1;
+    do
+    {
     printf("\nPatient Registration\n");
     printf("---------------------------\n");
     printf("Enter Patient name:");
     scanf("  %[^\n]", patientName[patientCount]);
     printf("Enter Patient age:");
     scanf("%d", &patientAge[patientCount]);
+    while(patientAge[patientCount]<0)
+    {
+        printf("Invalid age,Please enter valid age:");
+        scanf("%d",&patientAge[patientCount]);
+    }
     printf("Enter emergency Level(1-Normal,2=urgent,3=critical):");
     scanf(" %d", &emergencyLevel[patientCount]);
+    while(emergencyLevel[patientCount]<1 || emergencyLevel[patientCount]>3)
+     {
+         printf("Invalid emergency level,please enter 1-3:");
+         scanf("%d",&emergencyLevel[patientCount]);
+     }
     printf("Enter Specialty ID(1-4):");
     scanf("%d",&patientSpecialty[patientCount]);
-
+    while(patientSpecialty[patientCount] < 1 || patientSpecialty[patientCount]>4)
+   {
+       printf("Invalid specialty ID,Please Enter 1-4:");
+       scanf("%d",&patientSpecialty[patientCount]);
+   }
+   if (specialtyQueueCount[patientSpecialty[patientCount]-1] >= dailyPatientCap[patientSpecialty[patientCount]-1])
+   {
+       printf("This Specialty has reached its daily patient capacity.\n");
+       continue;
+   }
     printf("Is Admitted Ward?(1=Yes,0=No):");
     scanf(" %d", &admittedToWard[patientCount]);
+    while (admittedToWard[patientCount]!=0 && admittedToWard[patientCount]!=1)
+    {
+        printf("Invalid choice,please enter 1 for yes or 0 for no:");
+        scanf("%d",&admittedToWard[patientCount]);
+    }
       if (admittedToWard[patientCount]==1){
         printf("Enter Ward ID(1-4):");
         scanf("%d",&patientWard[patientCount]);
-
+        while(patientWard[patientCount]<1 || patientWard[patientCount]>4)
+        {
+          printf("Invalid Ward ID,Please Enter 1-4:");
+          scanf("%d",&patientWard[patientCount]);
+        }
         printf("Enter days of Admitted:");
         scanf("%d",&daysAdmitted[patientCount]);
+        while(daysAdmitted[patientCount]<=0)
+
+        {
+            printf("Invalid number of days,Please enter at least 1 day:");
+            scanf("%d",&daysAdmitted[patientCount]);
+        }
+
+     int wardIndex=patientWard[patientCount]-1;
+     int bedAllocated=0;
+     for (int bed=0;bed<totalBedCapacity[wardIndex];bed++)
+     {
+         if (bedOccupancy[wardIndex][bed]==0)
+            {
+                bedOccupancy[wardIndex][bed]=  1;
+                printf("Bed %d allocated succesfully.\n",bed+1);
+                bedAllocated=1;
+                break;
+            }
+         }
+    if(bedAllocated==0)
+    {
+        printf("No available Beds in this ward.\n");
+        patientWard[patientCount]=0;
+        daysAdmitted[patientCount]=0;
+        admittedToWard[patientCount]=0;
+    }
     }
       else
       {
@@ -215,6 +282,7 @@ int main()
     float discount;
     discount=calculateAgeSubsidy(patientAge[patientCount],grossAmount);
     printf("Age subsidy: LKR %.2f\n",discount);
+    patientDiscount[patientCount]=discount;
 
     float  finalAmount;
     finalAmount=grossAmount-discount;
@@ -227,6 +295,10 @@ int main()
     patientCount++;
 
     sortPatientsByPriority();
+    printf("\nDo you want to register another patient?(1=Yes, 0=No):");
+    scanf("%d", &anotherPatient);
+    }while(anotherPatient==1 && patientCount<MAX_PATIENTS);
+
     printf("\nPatient Registerd Succesfully.\n");
     printf("\nPatient Priority Order\n");
     printf("-------------------------\n");
@@ -251,12 +323,48 @@ int main()
      printf("\nRevenue Report\n");
      printf("-------------------------\n");
      float totalRevenue=0;
+     float totalDiscount=0;
      for (int i=0;i<patientCount;i++)
      {
          totalRevenue=totalRevenue+patientFinalAmount[i];
+         totalDiscount=totalDiscount+patientDiscount[i];
+     }
+     int normalCount=0;
+     int urgentCount=0;
+     int criticalCount=0;
+
+     for (int i=0;i<patientCount;i++)
+     {
+         if (emergencyLevel[i]==1)
+         {
+             normalCount++;
+         }else if(emergencyLevel[i]==2)
+         {
+             urgentCount++;
+         }else if(emergencyLevel[i]==3)
+         {
+             criticalCount++;
+         }
      }
      printf("Total Patients: %d\n",patientCount);
-     printf("Total Revenue:LKR %.2f\n",totalRevenue);
+     printf("Normal Patients:%d\n",normalCount);
+     printf("Urgent Patients:%d\n",urgentCount);
+     printf("Critical Patients:%d\n",criticalCount);
 
+     printf("Total Revenue:LKR %.2f\n",totalRevenue);
+     printf("Total Discounts:LKR %.2f\n",totalDiscount);
+     int highestPatient=0;
+     for(int i=1;i<patientCount;i++)
+     {
+         if(patientFinalAmount[i]>patientFinalAmount[highestPatient])
+          {
+              highestPatient=i;
+          }
+    }
+    if(patientCount>0)
+    {
+        printf("Highest-paying patient:%s\n",patientName[highestPatient]);
+        printf("Highest Patient Bill:LKR %.2f\n",patientFinalAmount[highestPatient]);
+    }
     return 0;
 }
