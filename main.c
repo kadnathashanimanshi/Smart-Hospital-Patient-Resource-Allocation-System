@@ -15,9 +15,10 @@ int dailyPatientCap[SPECIALTY_COUNT]={30,20,12,10};
 int wardID[WARD_COUNT]={1,2,3,4};
 char wardName[WARD_COUNT][30]={"General Ward","Paediatric Ward","Surgical Ward","ICU(Intensive Care Unit)"};
 float dailyBedRate[WARD_COUNT]={3000.00,6000.00,12000.00,25000.00};
-int totalBedCapacity[WARD_COUNT]={20,10,10,05};
+int totalBedCapacity[WARD_COUNT]={20,10,10,5};
 int bedOccupancy[4][20] ={0};
 
+char patientID[MAX_PATIENTS][20];
 char patientName[MAX_PATIENTS][50];
 int patientAge[MAX_PATIENTS];
 int emergencyLevel[MAX_PATIENTS];
@@ -88,6 +89,12 @@ void sortPatientsByPriority()
         patientAge[i]=patientAge[j];
         patientAge[j]=tempAge;
 
+        char tempID[20];
+
+        strcpy(tempID,patientID[i]);
+        strcpy(patientID[i],patientID[j]);
+        strcpy(patientID[j],tempID);
+
         char tempName[50];
 
         strcpy(tempName,patientName[i]);
@@ -129,7 +136,7 @@ void sortPatientsByPriority()
  }
     }
      }
-float calculateOcuupancyPercentage(int ward)
+float calculateOccupancyPercentage(int ward)
 {
     int occupiedBeds=0;
     for (int bed=0; bed<totalBedCapacity[ward];bed++){
@@ -142,6 +149,7 @@ float calculateOcuupancyPercentage(int ward)
 }
 int main()
 {
+
     printf("==============================================================\n");
     printf("SMART HOSPITAL RESOURCE ALLOCATION SYSTEM\n");
     printf("==============================================================\n");
@@ -183,6 +191,9 @@ int main()
     {
     printf("\nPatient Registration\n");
     printf("---------------------------\n");
+    printf("Enter Patient ID(e.g.,PAT-1001):");
+    scanf(" %19[^\n]",patientID[patientCount]);
+    printf("Patient ID:%s\n",patientID[patientCount]);
     printf("Enter Patient name:");
     scanf("  %[^\n]", patientName[patientCount]);
     printf("Enter Patient age:");
@@ -299,12 +310,12 @@ int main()
     scanf("%d", &anotherPatient);
     }while(anotherPatient==1 && patientCount<MAX_PATIENTS);
 
-    printf("\nPatient Registerd Succesfully.\n");
+    printf("\nPatient Registered Successfully.\n");
     printf("\nPatient Priority Order\n");
     printf("-------------------------\n");
     for(int i=0; i<patientCount;i++)
     {
-        printf("%d. %s -Emergency Level: %d\n",i+1,patientName[i],emergencyLevel[i]);
+        printf("%d. %s -Emergency Level: %d\n",i+1,patientID[i],patientName[i],emergencyLevel[i]);
     }
      printf("\nWard Occupancy Report\n");
      printf("-------------------------\n");
@@ -317,7 +328,7 @@ int main()
             }
      }
      int availableBeds=totalBedCapacity[ward]-occupiedBeds;
-     printf("%s: Total= %d,occupied= %d, Available= %d, Occupancy=%.2f%%\n",wardName[ward],totalBedCapacity[ward],occupiedBeds,availableBeds,calculateOcuupancyPercentage(ward));
+     printf("%s: Total= %d,occupied= %d, Available= %d, Occupancy=%.2f%%\n",wardName[ward],totalBedCapacity[ward],occupiedBeds,availableBeds,calculateOccupancyPercentage(ward));
 
      }
      printf("\nRevenue Report\n");
@@ -366,5 +377,6 @@ int main()
         printf("Highest-paying patient:%s\n",patientName[highestPatient]);
         printf("Highest Patient Bill:LKR %.2f\n",patientFinalAmount[highestPatient]);
     }
+
     return 0;
 }
