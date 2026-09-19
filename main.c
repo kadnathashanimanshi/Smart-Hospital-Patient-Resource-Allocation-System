@@ -147,9 +147,48 @@ float calculateOccupancyPercentage(int ward)
 
             }return (occupiedBeds* 100.0)/totalBedCapacity[ward];
 }
+void saveBedStatus()
+{
+    FILE *file= fopen("beds_status.txt","w");
+    if (file == NULL)
+    {
+        printf("Error opening beds_status.txt\n");
+        return;
+    }
+    for ( int ward =0;ward<WARD_COUNT; ward++)
+    {
+        for(int bed=0;bed<totalBedCapacity[ward];bed++)
+        {
+            fprintf(file, "%d ",bedOccupancy[ward][bed]);
+        }
+    fprintf(file, "\n");
+    }
+    fclose(file);
+    printf("\nBed Status Saved successfully\n");
+
+
+}
+void loadBedStatus()
+{
+    FILE *file;
+    file = fopen("beds_status.txt","r");
+    if (file == NULL)
+    {
+       return;
+    }
+    for ( int ward =0;ward<WARD_COUNT; ward++)
+    {
+        for(int bed=0;bed<totalBedCapacity[ward];bed++)
+        {
+            fscanf(file,"%d",&bedOccupancy[ward][bed]);
+        }
+    }
+    fclose(file);
+
+}
 int main()
 {
-
+    loadBedStatus();
     printf("==============================================================\n");
     printf("SMART HOSPITAL RESOURCE ALLOCATION SYSTEM\n");
     printf("==============================================================\n");
@@ -377,6 +416,7 @@ int main()
         printf("Highest-paying patient:%s\n",patientName[highestPatient]);
         printf("Highest Patient Bill:LKR %.2f\n",patientFinalAmount[highestPatient]);
     }
+    saveBedStatus();
 
     return 0;
 }
