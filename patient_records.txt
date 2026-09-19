@@ -1,0 +1,21 @@
+Patient ID: PAT 1001
+Patient Name: Miss.Nathasha Nimanshi
+Age: 21
+Emergency Level: 1
+Final Amount: LKR 4500.00
+Discount: LKR 0.00
+----------------------------------------------------
+Patient ID: PAT 1002
+Patient Name: Mr.Nathash
+Age: 70
+Emergency Level: 1
+Final Amount: LKR 11475.00
+Discount: LKR 2025.00
+----------------------------------------------------
+Patient ID: PAT 1003
+Patient Name: Miss.Sithmi Savindya
+Age: 56
+Emergency Level: 2
+Final Amount: LKR 51000.00
+Discount: LKR 0.00
+----------------------------------------------------

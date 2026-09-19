@@ -186,13 +186,32 @@ void loadBedStatus()
     fclose(file);
 
 }
+void savePatientRecord(int index)
+{
+    FILE *file= fopen("patient_records.txt","a");
+    if (file == NULL)
+    {
+        printf("Error opening patient_records.txt\n");
+        return;
+    }
+    fprintf(file, "Patient ID: %s\n",patientID[index]);
+    fprintf(file, "Patient Name: %s\n",patientName[index]);
+    fprintf(file, "Age: %d\n",patientAge[index]);
+    fprintf(file, "Emergency Level: %d\n",emergencyLevel[index]);
+    fprintf(file, "Final Amount: LKR %.2f\n",patientFinalAmount[index]);
+    fprintf(file, "Discount: LKR %.2f\n",patientDiscount[index]);
+    fprintf(file, "----------------------------------------------------\n");
+
+    fclose(file);
+    printf("Patient Record Saved Successfully.\n");
+}
 int main()
 {
     loadBedStatus();
     printf("==============================================================\n");
     printf("SMART HOSPITAL RESOURCE ALLOCATION SYSTEM\n");
     printf("==============================================================\n");
-    printf("Doctor Specialties Data\n");
+    printf("Doctor Specialities Data\n");
     printf("-----------------------\n");
 
     for(int i=0; i<SPECIALTY_COUNT; i++)
@@ -343,6 +362,8 @@ int main()
     specialtyQueueCount[patientSpecialty[patientCount]-1]++;
 
     patientCount++;
+
+    savePatientRecord(patientCount - 1);
 
     sortPatientsByPriority();
     printf("\nDo you want to register another patient?(1=Yes, 0=No):");
